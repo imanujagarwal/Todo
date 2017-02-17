@@ -5,6 +5,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * Created by anuj on 16/2/17.
@@ -16,6 +19,7 @@ public class dbhelper extends SQLiteOpenHelper {
 
 
     final static private String DB_NAME = "Todo";
+    final String TAG = "TAG";
 
     final static private String TABLE_NAME = "Tasks";
 
@@ -60,11 +64,12 @@ public class dbhelper extends SQLiteOpenHelper {
     }
 
     public boolean DeleteTask(String item, int position){
+        //Log.i(TAG, "DeleteTask: "+position);
         String s = position+"";
         myDb = this.getWritableDatabase();
-        myDb.delete("Tasks","_id=? and task=?",new String[]{s,item});
-        return true;
-
+        final int numColsDeleted = myDb.delete("Tasks","task=?",new String[]{item});
+        Log.i(TAG, "DeleteTask: "+numColsDeleted);
+        return (numColsDeleted > 0);
     }
 
 }

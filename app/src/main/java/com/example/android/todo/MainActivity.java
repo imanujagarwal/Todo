@@ -43,12 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
         ListView listview = (ListView) findViewById(R.id.list_view);
         myDB = new dbhelper(this);
-        Cursor c = myDB.getAll();
 
-        while(c.moveToNext()){
-            tasks.add(c.getString(0));
-            //Log.i(TAG,c.getString(0));
-        }
 
         arrayAdapter = new ArrayAdapter<>(this, R.layout.list_item, tasks);
         listview.setAdapter(arrayAdapter);
@@ -85,16 +80,19 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == TO_DO_NOTE_REQUEST_CODE && data!=null) {
             final String note = data.getStringExtra(TO_DO_NOTE_TEXT_EXTRA);
-            tasks.add(note);
-            arrayAdapter.notifyDataSetChanged();
-            myDB.InsertData(note);
+            if(note != null && !note.trim().equals("")){
+                tasks.add(note);
+                arrayAdapter.notifyDataSetChanged();
+                myDB.InsertData(note);
+            }
         }
         else if (requestCode == EDIT_TASK_CODE && data!=null){
             String response = data.getStringExtra(EDIT_EXTRA);
             if(response!= s) {
+                myDB.Update(response,position);
                 tasks.set(position,response);
                 arrayAdapter.notifyDataSetChanged();
-                myDB.Update(response,position);
+
             }
             else{
                 return;
@@ -102,4 +100,16 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        tasks.clear();
+        Cursor c = myDB.getAll();
+        while(c.moveToNext()){
+            tasks.add(c.getString(0));
+            //Log.i(TAG,c.getString(0));
+        }
+//Finally, notify the adapter the data backing it has been updated
+        arrayAdapter.notifyDataSetChanged();
+    }
 }

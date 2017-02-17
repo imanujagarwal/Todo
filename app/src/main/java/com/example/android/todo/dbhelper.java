@@ -1,5 +1,6 @@
 package com.example.android.todo;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -50,5 +51,21 @@ public class dbhelper extends SQLiteOpenHelper {
         return cursor;
         }
 
+    public boolean Update(String item, int position){
+        myDb = this.getWritableDatabase();
+        String strSQL = "UPDATE Tasks SET task =\""+item+"\" WHERE _id = "+ position;
+        myDb.execSQL(strSQL);
+        return true;
+
     }
+
+    public boolean DeleteTask(String item, int position){
+        String s = position+"";
+        myDb = this.getWritableDatabase();
+        myDb.delete("Tasks","_id=? and task=?",new String[]{s,item});
+        return true;
+
+    }
+
+}
 

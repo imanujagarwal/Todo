@@ -43,31 +43,46 @@ public class dbhelper extends SQLiteOpenHelper {
 
     }
 
-    public void InsertData(String s){
+    public void InsertData2(String s){
         myDb = getWritableDatabase();
         myDb.execSQL("INSERT INTO "+TABLE_NAME+" (task) VALUES('"+s+"');");
 
     }
 
+    public long insertData(String item) {
+
+        final ContentValues cv = new ContentValues(1);
+        cv.put("task",item);
+
+        myDb = getWritableDatabase();
+        return myDb.insert("Tasks", null, cv);
+    }
+
     public Cursor getAll(){
         myDb = this.getWritableDatabase();
-        Cursor cursor= myDb.rawQuery("SELECT task from "+TABLE_NAME,null);
+        Cursor cursor= myDb.rawQuery("SELECT * from Tasks",null);
         return cursor;
         }
 
-    public boolean Update(String item, int position){
+    public long Update(long id, String task){
+
         myDb = this.getWritableDatabase();
-        String strSQL = "UPDATE Tasks SET task =\""+item+"\" WHERE _id = "+ position;
-        myDb.execSQL(strSQL);
-        return true;
+
+        final ContentValues cv = new ContentValues(1);
+        cv.put("task", task);
+
+        final String where = "_id=?";
+        final String[] whereArgs = new String[] { String.valueOf(id) };
+
+        final int numRowsUpdated = myDb.update("Tasks", cv, where, whereArgs);
+        return numRowsUpdated;
 
     }
 
     public boolean DeleteTask(String item, int position){
         //Log.i(TAG, "DeleteTask: "+position);
-        String s = position+"";
         myDb = this.getWritableDatabase();
-        final int numColsDeleted = myDb.delete("Tasks","task=?",new String[]{item});
+        final int numColsDeleted = myDb.delete("Tasks","_id=?",new String[]{position+""});
         Log.i(TAG, "DeleteTask: "+numColsDeleted);
         return (numColsDeleted > 0);
     }

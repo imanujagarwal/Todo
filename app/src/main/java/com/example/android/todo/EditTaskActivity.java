@@ -13,7 +13,7 @@ public class EditTaskActivity extends AppCompatActivity {
 
     final String EDIT_EXTRA = "extra";
     final int EDIT_TASK_CODE = 2;
-    int position;
+    int _id=0;
     SQLiteDatabase myDB;
     final String TAG = "TAG";
 
@@ -25,7 +25,7 @@ public class EditTaskActivity extends AppCompatActivity {
         EditText editText = (EditText) findViewById(R.id.editext_task);
         Bundle bundle = getIntent().getExtras();
         String message = bundle.getString("message");
-        position = bundle.getInt("position");
+        _id = bundle.getInt("id");
         editText.setText(message);
 
         editText.requestFocus();
@@ -55,8 +55,8 @@ public class EditTaskActivity extends AppCompatActivity {
                 String note = task.getText().toString();
 
                 dbhelper db = new dbhelper(this);
-                db.DeleteTask(note,position);
-                Log.i(TAG, "onOptionsItemSelected: "+position+note);
+                db.DeleteTask(note,_id);
+                //Log.i(TAG, "onOptionsItemSelected: "+position+note);
                 finish();
                 break;
         }

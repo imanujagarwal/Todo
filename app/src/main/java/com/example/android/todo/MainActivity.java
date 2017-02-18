@@ -15,7 +15,11 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import static android.R.attr.id;
+import static android.R.attr.longClickable;
+import static android.R.attr.x;
 import static android.R.id.message;
+import static android.media.CamcorderProfile.get;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -31,9 +35,9 @@ public class MainActivity extends AppCompatActivity {
     final String EDIT_EXTRA = "extra";
     final int EDIT_TASK_CODE = 2;
 
-    ArrayAdapter<String> arrayAdapter;
+    ArrayAdapter<TodoItem> arrayAdapter;
 
-    ArrayList<String> tasks = new ArrayList<String>();
+    ArrayList<TodoItem> tasks = new ArrayList<TodoItem>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +71,9 @@ public class MainActivity extends AppCompatActivity {
                 Log.i(TAG, "onItemClick: "+position);
                 Intent launchActivityToEdit = new Intent(MainActivity.this,EditTaskActivity.class);
                 launchActivityToEdit.putExtra("message", s);
-                launchActivityToEdit.putExtra("position",position);
+                TodoItem ti = tasks.get(position);
+                long row = ti.getId();
+                launchActivityToEdit.putExtra("id",row);
 
                 startActivityForResult(launchActivityToEdit,EDIT_TASK_CODE);
 
@@ -81,16 +87,20 @@ public class MainActivity extends AppCompatActivity {
         if(requestCode == TO_DO_NOTE_REQUEST_CODE && data!=null) {
             final String note = data.getStringExtra(TO_DO_NOTE_TEXT_EXTRA);
             if(note != null && !note.trim().equals("")){
-                tasks.add(note);
+                long row = myDB.insertData(note);
+                tasks.add(new TodoItem(row,note));
                 arrayAdapter.notifyDataSetChanged();
-                myDB.InsertData(note);
+
             }
         }
         else if (requestCode == EDIT_TASK_CODE && data!=null){
             String response = data.getStringExtra(EDIT_EXTRA);
-            if(response!= s) {
-                myDB.Update(response,position);
-                tasks.set(position,response);
+            if(!response.equals(s)) {
+                TodoItem ti = tasks.get(position);
+                long row = ti.getId();
+                myDB.Update(row,response);
+                //Log.i(TAG, "onActivityResult: "+response + "" +position);
+                tasks.set(position,new TodoItem(row,response));
                 arrayAdapter.notifyDataSetChanged();
 
             }
@@ -106,10 +116,15 @@ public class MainActivity extends AppCompatActivity {
         tasks.clear();
         Cursor c = myDB.getAll();
         while(c.moveToNext()){
-            tasks.add(c.getString(0));
+            long id = c.getInt(c.getColumnIndex("_id"));
+            String tempTask = c.getString(c.getColumnIndex("task"));
+
+            tasks.add(new TodoItem(id,tempTask));
             //Log.i(TAG,c.getString(0));
         }
 //Finally, notify the adapter the data backing it has been updated
         arrayAdapter.notifyDataSetChanged();
     }
+
+
 }

@@ -9,17 +9,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-
 import java.util.ArrayList;
-
-import static android.R.attr.id;
-import static android.R.attr.longClickable;
-import static android.R.attr.x;
-import static android.R.id.message;
-import static android.media.CamcorderProfile.get;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -122,7 +114,6 @@ public class MainActivity extends AppCompatActivity {
             tasks.add(new TodoItem(id,tempTask));
             //Log.i(TAG,c.getString(0));
         }
-//Finally, notify the adapter the data backing it has been updated
         arrayAdapter.notifyDataSetChanged();
     }
 

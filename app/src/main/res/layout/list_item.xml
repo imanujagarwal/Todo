@@ -5,7 +5,9 @@
     android:id="@+id/listview_item"
     android:textSize="32dp"
     android:layout_width="match_parent"
-    android:layout_height="64dp"
+    android:layout_height="wrap_content"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp"
 
     android:gravity="start|center_vertical"
     android:paddingLeft="16dp"

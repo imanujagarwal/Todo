@@ -1,21 +1,19 @@
 package com.example.android.todo;
 
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class EditTaskActivity extends AppCompatActivity {
 
     final String EDIT_EXTRA = "extra";
     final int EDIT_TASK_CODE = 2;
-    int _id=0;
-    SQLiteDatabase myDB;
-    final String TAG = "TAG";
+    Long _id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,10 +23,12 @@ public class EditTaskActivity extends AppCompatActivity {
         EditText editText = (EditText) findViewById(R.id.editext_task);
         Bundle bundle = getIntent().getExtras();
         String message = bundle.getString("message");
-        _id = bundle.getInt("id");
+        _id = bundle.getLong("id");
         editText.setText(message);
 
         editText.requestFocus();
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+
 
     }
 
@@ -56,7 +56,8 @@ public class EditTaskActivity extends AppCompatActivity {
 
                 dbhelper db = new dbhelper(this);
                 db.DeleteTask(note,_id);
-                //Log.i(TAG, "onOptionsItemSelected: "+position+note);
+                Toast.makeText(getBaseContext(),"Note Deleted",
+                        Toast.LENGTH_SHORT).show();
                 finish();
                 break;
         }

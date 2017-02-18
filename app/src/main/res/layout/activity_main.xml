@@ -10,7 +10,9 @@
         android:id="@+id/list_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Hello World!" />
+        android:text="Hello World!"
+        android:divider="@null"
+        android:dividerHeight="0dp"/>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/addfab"

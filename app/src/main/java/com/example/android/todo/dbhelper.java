@@ -79,10 +79,10 @@ public class dbhelper extends SQLiteOpenHelper {
 
     }
 
-    public boolean DeleteTask(String item, int position){
+    public boolean DeleteTask(String item, Long position){
         //Log.i(TAG, "DeleteTask: "+position);
         myDb = this.getWritableDatabase();
-        final int numColsDeleted = myDb.delete("Tasks","_id=?",new String[]{position+""});
+        final int numColsDeleted = myDb.delete("Tasks","_id=?",new String[]{String.valueOf(position)});
         Log.i(TAG, "DeleteTask: "+numColsDeleted);
         return (numColsDeleted > 0);
     }

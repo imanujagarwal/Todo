@@ -2,8 +2,15 @@
 <EditText
     xmlns:android = "http://schemas.android.com/apk/res/android"
     android:id="@+id/editext_task"
+
+    android:paddingLeft="15dp"
+    android:paddingTop="18dp"
     android:textSize="32dp"
+
     android:layout_height="match_parent"
     android:layout_width="match_parent"
+    android:textCursorDrawable="@drawable/custom_cursor"
+    android:textColor="@color/White"
     android:gravity="top"
+    android:background="@color/colorAccent"
     android:inputType="textMultiLine" />

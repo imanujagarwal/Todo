@@ -27,12 +27,13 @@ The following **additional** features are implemented:
 
 * [X] Added Floating action button to the main screen.
 * [X] Toast message notifications on deletion of Todo Items.
+* [X] Added a View which triggers and replaces main Screen when listview is empty.
 
 ## Video Walkthrough 
 
 Here's a walkthrough of implemented user stories:
 
-<img src='http://i.imgur.com/BfVJxt3.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='http://i.giphy.com/26BGpGYP7DzSak9m8.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
 
 ## Notes

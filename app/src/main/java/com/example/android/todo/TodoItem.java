@@ -6,7 +6,7 @@ package com.example.android.todo;
 
 public class TodoItem {
 
-    public long _id; // for cupboard
+    public long _id;
 
     public String itemName;
 
@@ -32,11 +32,6 @@ public class TodoItem {
         this.itemName = itemName;
 
     }
-
-    //public ToDoItem(String name, Integer cuteValue) {
-    //  this.itemName = name;
-    //}
-
 
     @Override
     public String toString() {

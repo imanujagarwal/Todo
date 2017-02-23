@@ -12,8 +12,6 @@ public class AddTaskActivity extends AppCompatActivity {
 
     public final int TO_DO_NOTE_REQUEST_CODE = 1;
     public final String TO_DO_NOTE_TEXT_EXTRA = "to_do_extra";
-    final String EDIT_EXTRA = "extra";
-    final int EDIT_TASK_CODE = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

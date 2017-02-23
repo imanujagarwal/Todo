@@ -1,4 +1,4 @@
-package com.example.android.todo;
+package com.example.android.todo.Data;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -6,61 +6,56 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import com.example.android.todo.Data.todoItemContract.todoItem;
 
-import static android.content.ContentValues.TAG;
-
-/**
- * Created by anuj on 16/2/17.
- */
 
 public class dbhelper extends SQLiteOpenHelper {
 
-    SQLiteDatabase myDb;
+    public SQLiteDatabase myDb;
 
 
-    final static private String DB_NAME = "Todo";
+    final static private String DB_NAME = "Todo.db";
     final String TAG = "TAG";
-
-    final static private String TABLE_NAME = "Tasks";
-
     final static private int DB_VER = 1;
 
-    dbhelper(Context context){
+
+    public dbhelper(Context context){
         super(context,DB_NAME,null,DB_VER);
 
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE "+TABLE_NAME+"(_id INTEGER PRIMARY KEY AUTOINCREMENT,task TEXT);");
+        String SQL_CREATE_TABLE = "CREATE TABLE " + todoItem.TABLE_NAME + "("
+                + todoItem._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + todoItem.COLUMN_TASK_NAME + " TEXT);";
+
+
+        db.execSQL(SQL_CREATE_TABLE);
 
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int i, int i1) {
-        db.execSQL("drop table if exists "+TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS "+todoItem.TABLE_NAME);
         onCreate(db);
-
-    }
-
-    public void InsertData2(String s){
-        myDb = getWritableDatabase();
-        myDb.execSQL("INSERT INTO "+TABLE_NAME+" (task) VALUES('"+s+"');");
 
     }
 
     public long insertData(String item) {
 
         final ContentValues cv = new ContentValues(1);
-        cv.put("task",item);
+        cv.put(todoItem.COLUMN_TASK_NAME,item);
 
         myDb = getWritableDatabase();
-        return myDb.insert("Tasks", null, cv);
+        long t = myDb.insert(todoItem.TABLE_NAME, null, cv);
+        Log.i(TAG, "insertData: "+t);
+        return t;
     }
 
     public Cursor getAll(){
         myDb = this.getWritableDatabase();
-        Cursor cursor= myDb.rawQuery("SELECT * from Tasks",null);
+        Cursor cursor= myDb.rawQuery("SELECT * from "+todoItem.TABLE_NAME,null);
         return cursor;
         }
 
@@ -69,12 +64,12 @@ public class dbhelper extends SQLiteOpenHelper {
         myDb = this.getWritableDatabase();
 
         final ContentValues cv = new ContentValues(1);
-        cv.put("task", task);
+        cv.put(todoItem.COLUMN_TASK_NAME, task);
 
-        final String where = "_id=?";
+        final String where = "_ID=?";
         final String[] whereArgs = new String[] { String.valueOf(id) };
 
-        final int numRowsUpdated = myDb.update("Tasks", cv, where, whereArgs);
+        final int numRowsUpdated = myDb.update(todoItem.TABLE_NAME, cv, where, whereArgs);
         return numRowsUpdated;
 
     }
@@ -82,8 +77,8 @@ public class dbhelper extends SQLiteOpenHelper {
     public boolean DeleteTask(String item, Long position){
         //Log.i(TAG, "DeleteTask: "+position);
         myDb = this.getWritableDatabase();
-        final int numColsDeleted = myDb.delete("Tasks","_id=?",new String[]{String.valueOf(position)});
-        Log.i(TAG, "DeleteTask: "+numColsDeleted);
+        final int numColsDeleted = myDb.delete(todoItem.TABLE_NAME,"_ID=?",new String[]{String.valueOf(position)});
+        //Log.i(TAG, "DeleteTask: "+numColsDeleted);
         return (numColsDeleted > 0);
     }
 

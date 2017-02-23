@@ -5,12 +5,15 @@ import android.database.Cursor;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.example.android.todo.Data.dbhelper;
+import com.example.android.todo.Data.todoItemContract.todoItem;
+
 import java.util.ArrayList;
 
 
@@ -19,8 +22,6 @@ public class MainActivity extends AppCompatActivity {
     dbhelper myDB;
     String s;
     int position;
-
-    public final static String TAG = "tag";
 
     final int TO_DO_NOTE_REQUEST_CODE = 1;
     final String TO_DO_NOTE_TEXT_EXTRA = "to_do_extra";
@@ -44,6 +45,8 @@ public class MainActivity extends AppCompatActivity {
         arrayAdapter = new ArrayAdapter<>(this, R.layout.list_item, tasks);
         listview.setAdapter(arrayAdapter);
 
+        listview.setEmptyView(findViewById(R.id.empty));
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.addfab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,9 +61,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 TextView tv = (TextView) view.findViewById(R.id.listview_item);
+
+                //String of item clicked
                 s = tv.getText().toString();
+
                 position = i;
-                Log.i(TAG, "onItemClick: "+position);
                 Intent launchActivityToEdit = new Intent(MainActivity.this,EditTaskActivity.class);
                 launchActivityToEdit.putExtra("message", s);
                 TodoItem ti = tasks.get(position);
@@ -91,14 +96,11 @@ public class MainActivity extends AppCompatActivity {
                 TodoItem ti = tasks.get(position);
                 long row = ti.getId();
                 myDB.Update(row,response);
-                //Log.i(TAG, "onActivityResult: "+response + "" +position);
                 tasks.set(position,new TodoItem(row,response));
                 arrayAdapter.notifyDataSetChanged();
-
             }
-            else{
+            else
                 return;
-            }
         }
     }
 
@@ -108,11 +110,10 @@ public class MainActivity extends AppCompatActivity {
         tasks.clear();
         Cursor c = myDB.getAll();
         while(c.moveToNext()){
-            long id = c.getInt(c.getColumnIndex("_id"));
-            String tempTask = c.getString(c.getColumnIndex("task"));
+            long id = c.getInt(c.getColumnIndex(todoItem._ID));
+            String tempTask = c.getString(c.getColumnIndex(todoItem.COLUMN_TASK_NAME));
 
             tasks.add(new TodoItem(id,tempTask));
-            //Log.i(TAG,c.getString(0));
         }
         arrayAdapter.notifyDataSetChanged();
     }

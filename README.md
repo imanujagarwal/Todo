@@ -1,5 +1,7 @@
 # Pre-work - *Todo*
 
+[![Join the chat at https://gitter.im/Todo339/Lobby](https://badges.gitter.im/Todo339/Lobby.svg)](https://gitter.im/Todo339/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 **Todo** is an android app that allows building a todo list and basic todo items management functionality including adding new items, editing and deleting an existing item.
 
 Submitted by: **Anuj Agarwal**
